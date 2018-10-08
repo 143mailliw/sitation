@@ -24,7 +24,7 @@ router.post('/', function(req, res) {
           return res.status(500).send("WHOOPS!");
       }
 
-      return res.status(200).send();
+      return res.redirect('/');
   })
 })
 
