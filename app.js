@@ -64,8 +64,10 @@ app.use('/users', usersUsersRouter);
 // blog
 var blogAddPostRouter = require('./routes/blog/addpost');
 var blogAdminAddBlogPost = require('./routes/admin/addblogpost');
+var blogViewPost = require('./routes/blog/viewpost');
 app.use('/admin/addblogpost', blogAdminAddBlogPost);
 app.use('/processing/addpost', blogAddPostRouter);
+app.use('/viewpost', blogViewPost);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

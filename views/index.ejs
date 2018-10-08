@@ -1,14 +1,14 @@
 <% include ./partials/header %>
 <style>
     p { white-space: pre-line; }
+    .givemespace { margin: 15px 0px; padding: 25px 30px 20px}
 </style>
-<div class="container-fluid">
-    <% for(let i = posts.length - 1; i > 0; i--) { %>
-        <article>
-            <h1><%= posts[i].name %></h1>
-            <%= posts[i].author %> - <%= posts[i].date %>
-            <p><%- posts[i].body %></p>
-        </article>
-    <% } %>
+<% for(let i = posts.length - 1; i > 0; i--) { %>
+    <div class="border border-secondary rounded givemespace">
+        <h1><%-"<a href='viewpost/" + posts[i]._id + "'>" + posts[i].name + "</a>" %></h1>
+        <%= posts[i].author %> - <%= posts[i].date %>
+        <p><%- posts[i].body %></p>
+    </div>
+<% } %>
 </div>
 <% include ./partials/footer %>
