@@ -21,7 +21,7 @@ router.post('/', function(req, res) {
   newuser.save(function(err, savedUser) {
       if(err) {
           console.log(err);
-          return res.status(500).send("WHOOPS!");
+          return res.status(500).send();
       }
 
       return res.redirect('/');

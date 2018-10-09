@@ -18,7 +18,12 @@
 <% } %>
 <% for(let i = comments.length; i > 0; i--) { %>
 <div class="border border-secondary rounded givemespace">
-    <%= comments[i - 1].author %> - <%= comments[i - 1].date %>
+    <%= comments[i - 1].author %> - <%= comments[i - 1].date%>
+    <% if(user != undefined) { %>
+        <% if(user.permissionlvl == 255) { %>
+            <br> <%- "<a href='/processing/deletecomment/" + comments[i - 1]._id + "'>Delete Comment</a>" %> <br>
+        <% } %>
+    <% } %>
     <p><%- comments[i - 1].body %></p>
 </div>
 <% } %>

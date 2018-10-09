@@ -67,12 +67,22 @@ app.use('/users', usersUsersRouter);
 // blog
 var blogAddPostRouter = require('./routes/blog/addpost');
 var blogAddCommentRouter = require('./routes/blog/addcomment');
-var blogAdminAddBlogPost = require('./routes/admin/addblogpost');
-var blogViewPost = require('./routes/blog/viewpost');
-app.use('/admin/addblogpost', blogAdminAddBlogPost);
+var blogAdminAddBlogPostRouter = require('./routes/admin/addblogpost');
+var blogViewPostRouter = require('./routes/blog/viewpost');
+var blogAdminEditPostRouter = require('./routes/admin/editblogpost');
+var blogDeletePostRouter = require('./routes/blog/deletepost');
+var blogEditPostRouter = require('./routes/blog/editpost');
+var blogAdminListPostRouter = require('./routes/admin/listposts');
+var blogDeleteCommentRouter = require('./routes/blog/deletecomment');
+app.use('/admin/addblogpost', blogAdminAddBlogPostRouter);
+app.use('/admin/editblogpost', blogAdminEditPostRouter);
+app.use('/admin/listposts', blogAdminListPostRouter);
 app.use('/processing/addpost', blogAddPostRouter);
-app.use('/viewpost', blogViewPost);
 app.use('/processing/addcomment', blogAddCommentRouter);
+app.use('/processing/deletepost', blogDeletePostRouter);
+app.use('/processing/deletecomment', blogDeleteCommentRouter);
+app.use('/processing/editpost', blogEditPostRouter);
+app.use('/viewpost', blogViewPostRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
