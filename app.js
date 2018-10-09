@@ -32,6 +32,9 @@ mongoose.connect(config.mongodb);
 var postSchema = new mongoose.Schema({ body: String, name: String, author: String, date: String });
 var Post = mongoose.model('Post', postSchema);
 module.exports = Post;
+var commentSchema = new mongoose.Schema({ body: String, author: String, date: String, postid: String });
+var Comment = mongoose.model('Comment', commentSchema);
+module.exports = Comment;
 
 // parser setup
 app.use(bodyParser.json());
@@ -63,11 +66,13 @@ app.use('/register', usersRegisterRouter);
 app.use('/users', usersUsersRouter);
 // blog
 var blogAddPostRouter = require('./routes/blog/addpost');
+var blogAddCommentRouter = require('./routes/blog/addcomment');
 var blogAdminAddBlogPost = require('./routes/admin/addblogpost');
 var blogViewPost = require('./routes/blog/viewpost');
 app.use('/admin/addblogpost', blogAdminAddBlogPost);
 app.use('/processing/addpost', blogAddPostRouter);
 app.use('/viewpost', blogViewPost);
+app.use('/processing/addcomment', blogAddCommentRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -10,6 +10,9 @@ router.post('/', (req, res) => {
     var authorText = req.session.user.username;
     var dateText = date.toISOString().slice(0,10);
     var postData = new Post({body: bodyText, name: nameText, author: authorText, date: dateText});
+    if (req.session.user.permissionlvl != 255) {
+        res.status(403).send("Nice try.");
+    }
     postData.save().then( result => {
         res.redirect('/');
     }).catch(err => {

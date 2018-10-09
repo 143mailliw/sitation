@@ -3,11 +3,11 @@
     p { white-space: pre-line; }
     .givemespace { margin: 15px 0px; padding: 25px 30px 20px}
 </style>
-<% for(let i = posts.length - 1; i > 0; i--) { %>
+<% for(let i = posts.length; i > 0; i--) { %>
     <div class="border border-secondary rounded givemespace">
-        <h1><%-"<a href='viewpost/" + posts[i]._id + "'>" + posts[i].name + "</a>" %></h1>
-        <%= posts[i].author %> - <%= posts[i].date %>
-        <p><%- posts[i].body %></p>
+        <h1><%-"<a href='viewpost/" + posts[i - 1]._id + "'>" + posts[i - 1].name + "</a>" %></h1>
+        <%= posts[i - 1].author %> - <%= posts[i - 1].date %>
+        <p><%- posts[i - 1].body %></p>
     </div>
 <% } %>
 </div>
