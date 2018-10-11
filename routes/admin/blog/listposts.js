@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
             return res.status(403).send();
         }
         Post.find({}, (err, posts) => {
-            res.render('blog/listposts', { posts: posts, usersession: req.session.user, links: topbardata })
+            res.status(200).render('blog/listposts', { posts: posts, usersession: req.session.user, links: topbardata })
         });
     } else {
         res.status(403).send();

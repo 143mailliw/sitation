@@ -16,7 +16,7 @@ router.get('/', function(req, res) {
         return res.status(403).send();
     }
     if(req.session.user.permissionlvl === 255) {
-        return res.render('topbar/addtopbar', { usersession: req.session.user, links: topbardata });
+        return res.status(200).res.render('topbar/addtopbar', { usersession: req.session.user, links: topbardata });
     } else {
         return res.status(403).send();
     }

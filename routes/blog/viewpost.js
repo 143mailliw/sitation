@@ -18,7 +18,7 @@ router.get("/:id", (req, res) => {
         commentdata = comments;
     });
     Post.findById({_id: req.params.id }, (err, posts) => {
-        res.render('blog/viewpost', { post: posts, usersession: req.session.user, comments: commentdata, links: topbardata })
+        res.status(200).render('blog/viewpost', { post: posts, usersession: req.session.user, comments: commentdata, links: topbardata })
     });
 });
 module.exports = router;

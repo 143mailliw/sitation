@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
             return res.status(403).send();
         }
         Page.find({}, (err, pages) => {
-            res.render('pages/listpages', { pages: pages, usersession: req.session.user, links: topbardata })
+            res.status(200).render('pages/listpages', { pages: pages, usersession: req.session.user, links: topbardata })
         });
     } else {
         res.status(403).send();

@@ -14,7 +14,7 @@ Topbar.find({}, (err, links) => {
 
 router.get("/", (req, res) => {
     Post.find({}, (err, posts) => {
-        res.render('index', { posts: posts, usersession: req.session.user, links: topbardata })
+        res.status(200).render('index', { posts: posts, usersession: req.session.user, links: topbardata })
     });
 });
 
