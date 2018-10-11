@@ -1,20 +1,18 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
-var Post = require('mongoose').model('Post');
+var Page = require('mongoose').model('Page');
 
 router.post('/', (req, res) => {
-    var date = new Date();
     var bodyText = req.body.body;
     var nameText = req.body.name;
-    var authorText = req.session.user.username;
-    var dateText = date.toISOString().slice(0,10);
-    var postData = new Post({body: bodyText, name: nameText, author: authorText, date: dateText});
+    var permreqNumber = 0;
+    var pageData = new Page({body: bodyText, name: nameText, permreq: permreqNumber});
     if (req.session.user.permissionlvl != 255) {
         res.status(403).send("Nice try.");
     }
-    postData.save().then( result => {
-        res.redirect('/');
+    pageData.save().then( result => {
+        res.redirect('/viewpage/' + result._id );
     }).catch(err => {
         res.status(400).send("Unable to save data" + err);
     });

@@ -11,7 +11,7 @@ router.post('/:id', (req, res) => {
         res.status(403).send("Nice try.");
     }
     Post.updateOne({ _id: req.params.id }, { name: nameText, body: bodyText }, (err, post) => {
-        res.redirect('/');
+        res.redirect('/viewpost/' + post._id );
     }).catch(err => {
         res.status(400).send("Unable to save data" + err);
     });

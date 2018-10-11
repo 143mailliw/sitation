@@ -11,8 +11,6 @@ var expressSanitizer = require('express-sanitizer');
 var config = require('./config');
 
 // local requirements
-
-console.log(config)
 var app = express();
 
 // view engine setup
@@ -28,13 +26,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 // setup mongoose
 mongoose.connect(config.mongodb);
 
-// blogsetup
+// database setup
 var postSchema = new mongoose.Schema({ body: String, name: String, author: String, date: String });
 var Post = mongoose.model('Post', postSchema);
-module.exports = Post;
 var commentSchema = new mongoose.Schema({ body: String, author: String, date: String, postid: String });
 var Comment = mongoose.model('Comment', commentSchema);
-module.exports = Comment;
+var pageSchema = new mongoose.Schema({ body: String, name: String, permreq: Number /*TODO: Implement Permission requirements for certain pages.*/ });
+var Page = mongoose.model('Page', pageSchema);
+var topbarSchema = new mongoose.Schema({ name: String, url: String, permreq: Number, /*TODO: Implement Permission requirements for certain pages.*/ });
+var Topbar = mongoose.model('Topbar', topbarSchema);
 
 // parser setup
 app.use(bodyParser.json());
@@ -67,12 +67,12 @@ app.use('/users', usersUsersRouter);
 // blog
 var blogAddPostRouter = require('./routes/blog/addpost');
 var blogAddCommentRouter = require('./routes/blog/addcomment');
-var blogAdminAddBlogPostRouter = require('./routes/admin/addblogpost');
+var blogAdminAddBlogPostRouter = require('./routes/admin/blog/addblogpost');
 var blogViewPostRouter = require('./routes/blog/viewpost');
-var blogAdminEditPostRouter = require('./routes/admin/editblogpost');
+var blogAdminEditPostRouter = require('./routes/admin/blog/editblogpost');
 var blogDeletePostRouter = require('./routes/blog/deletepost');
 var blogEditPostRouter = require('./routes/blog/editpost');
-var blogAdminListPostRouter = require('./routes/admin/listposts');
+var blogAdminListPostRouter = require('./routes/admin/blog/listposts');
 var blogDeleteCommentRouter = require('./routes/blog/deletecomment');
 app.use('/admin/addblogpost', blogAdminAddBlogPostRouter);
 app.use('/admin/editblogpost', blogAdminEditPostRouter);
@@ -83,10 +83,39 @@ app.use('/processing/deletepost', blogDeletePostRouter);
 app.use('/processing/deletecomment', blogDeleteCommentRouter);
 app.use('/processing/editpost', blogEditPostRouter);
 app.use('/viewpost', blogViewPostRouter);
+// pages
+var blogAddPageRouter = require('./routes/pages/addpage');
+var blogAdminAddPageRouter = require('./routes/admin/pages/addpage');
+var blogViewPageRouter = require('./routes/pages/viewpage');
+var blogAdminEditPageRouter = require('./routes/admin/pages/editpage');
+var blogDeletePageRouter = require('./routes/pages/deletepage');
+var blogEditPageRouter = require('./routes/pages/editpage');
+var blogAdminListPagesRouter = require('./routes/admin/pages/listpages');
+app.use('/admin/addpage', blogAdminAddPageRouter);
+app.use('/admin/editpage', blogAdminEditPageRouter);
+app.use('/admin/listpages', blogAdminListPagesRouter);
+app.use('/processing/addpage', blogAddPageRouter);
+app.use('/processing/deletepage', blogDeletePageRouter);
+app.use('/processing/editpage', blogEditPageRouter);
+app.use('/viewpage', blogViewPageRouter);
+// topbar
+var blogAddTopbarRouter = require('./routes/topbar/addtopbar');
+var blogAdminAddTopbarRouter = require('./routes/admin/topbar/addtopbar');
+var blogDeleteTopbarRouter = require('./routes/topbar/deletetopbar');
+var blogAdminListTopbarsRouter = require('./routes/admin/topbar/listtopbars');
+app.use('/admin/addtopbar', blogAdminAddTopbarRouter);
+app.use('/admin/listtopbars', blogAdminListTopbarsRouter);
+app.use('/processing/addtopbar', blogAddTopbarRouter);
+app.use('/processing/deletetopbar', blogDeleteTopbarRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
+});
+
+var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
+Topbar.find({}, (err, links) => {
+    topbardata = links;
 });
 
 // error handler
@@ -97,7 +126,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error' , { usersession: req.session.user, links: topbardata });
 });
 
 module.exports = app;

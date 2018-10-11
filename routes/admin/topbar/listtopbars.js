@@ -3,6 +3,9 @@ var mongoose = require('mongoose')
 var router = express.Router();
 var xss = require("xss");
 var Topbar = require('mongoose').model('Topbar');
+
+// we already find topbars here, no need to do so again
+
 /* GET home page. */
 router.get("/", (req, res) => {
     if(req.session.user.permissionlvl === 255) {
@@ -10,7 +13,7 @@ router.get("/", (req, res) => {
             return res.status(403).send();
         }
         Topbar.find({}, (err, topbar) => {
-            res.render('listtopbars', { links: topbar, usersession: req.session.user })
+            res.render('topbar/listtopbars', { links: topbar, usersession: req.session.user })
         });
     } else {
         res.status(403).send();

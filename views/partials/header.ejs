@@ -20,9 +20,14 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
                     </li>
+                    <% for(let i = links.length; i > 0; i--) { %>
+                        <li class="nav-item">
+                            <%- "<a class='nav-link' href='" + links[i-1].url + "'>" + links[i-1].name + "</a>" %>
+                        </li>
+                    <% } %>
                 </ul>
                 <% if(user != undefined) { %>
                     <span class="nav-item dropdown">
@@ -31,9 +36,11 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <%if(user.permissionlvl == 255) { %>
-                            <a class="dropdown-item" href="/admin/listposts">Admin: Post Management</a>
-                            <div class="dropdown-divider"></div>
-                            <% }%>
+                                <a class="dropdown-item" href="/admin/listposts">Admin: Post Management</a>
+                                <a class="dropdown-item" href="/admin/listpages">Admin: Page Management</a>
+                                <a class="dropdown-item" href="/admin/listtopbars">Admin: Navbar Management</a>
+                                <div class="dropdown-divider"></div>
+                            <% } %>
                             <a class="dropdown-item" href="/logout">Logout</a>
                         </div>
                     </span>

@@ -14,7 +14,7 @@ router.post('/', (req, res) => {
         res.status(403).send("Nice try.");
     }
     postData.save().then( result => {
-        res.redirect('/');
+        res.redirect('/viewpost/' + result._id );
     }).catch(err => {
         res.status(400).send("Unable to save data" + err);
     });

@@ -1,4 +1,4 @@
-<% include ./partials/header %>
+<% include ../partials/header %>
 <div class="border border-secondary rounded givemespace">
     <h1><%=post.name%></h1>
     <%= post.author %> - <%= post.date %>
@@ -27,4 +27,4 @@
     <p><%- comments[i - 1].body %></p>
 </div>
 <% } %>
-<% include ./partials/footer %>
+<% include ../partials/footer %>
