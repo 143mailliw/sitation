@@ -6,12 +6,11 @@ var crypto = require('crypto');
 var router = express.Router();
 var Topbar = require('mongoose').model('Topbar');
 
-var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
-Topbar.find({}, (err, links) => {
-    topbardata = links;
-});
-
 router.get('/', function(req, res) {
+    var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
+    Topbar.find({}, (err, links) => {
+        topbardata = links;
+    });
     if(req.session.user === undefined) {
         return res.status(403).send();
     }

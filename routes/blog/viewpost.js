@@ -6,13 +6,12 @@ var Post = require('mongoose').model('Post');
 var Comment = require('mongoose').model('Comment');
 var Topbar = require('mongoose').model('Topbar');
 
-var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
-Topbar.find({}, (err, links) => {
-    topbardata = links;
-});
-
 /* GET blog page. */
 router.get("/:id", (req, res) => {
+    var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
+    Topbar.find({}, (err, links) => {
+        topbardata = links;
+    });
     var commentdata = new Comment({body:"Whoops! We did a fucksy wucksy. The comment system is broken!", name: "System", date:"Now"});
     Comment.find({postid: req.params.id}, (err, comments) => {
         commentdata = comments;

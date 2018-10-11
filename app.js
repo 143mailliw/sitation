@@ -115,13 +115,13 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
-Topbar.find({}, (err, links) => {
-    topbardata = links;
-});
-
 // error handler
 app.use(function(err, req, res, next) {
+    var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
+    Topbar.find({}, (err, links) => {
+        topbardata = links;
+    });
+
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

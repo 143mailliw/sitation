@@ -7,12 +7,11 @@ var Topbar = require('mongoose').model('Topbar');
 /* GET home page. */
 /* TODO: Add optional page index, instead of blog. */
 
-var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
-Topbar.find({}, (err, links) => {
-    topbardata = links;
-});
-
 router.get("/", (req, res) => {
+    var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
+    Topbar.find({}, (err, links) => {
+        topbardata = links;
+    });
     Post.find({}, (err, posts) => {
         res.render('index', { posts: posts, usersession: req.session.user, links: topbardata })
     });

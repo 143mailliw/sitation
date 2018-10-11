@@ -7,12 +7,11 @@ var router = express.Router();
 var Page = require('mongoose').model('Page');
 var Topbar = require('mongoose').model('Topbar');
 
-var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
-Topbar.find({}, (err, links) => {
-    topbardata = links;
-});
-
 router.get('/:id', function(req, res) {
+    var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
+    Topbar.find({}, (err, links) => {
+        topbardata = links;
+    });
     if(req.session.user === undefined) {
         return res.status(403).send();
     }
