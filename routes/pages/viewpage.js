@@ -13,7 +13,7 @@ Topbar.find({}, (err, links) => {
 /* GET blog page. */
 router.get("/:id", (req, res) => {
     Page.findById({_id: req.params.id }, (err, page) => {
-        res.status(200).render('pages/viewpage', { page: page, usersession: req.session.user, links: topbardata })
+        res.render('pages/viewpage', { page: page, usersession: req.session.user, links: topbardata })
     });
 });
 module.exports = router;
