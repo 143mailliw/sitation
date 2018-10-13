@@ -8,4 +8,4 @@ Quick Setup
     cd sitation
     npm install
 
-Your site will be availible at localhost:3000. To change this, and other settings, edit config.js.
+Your site will be available at localhost:3000. To change this, and other settings, edit config.js.
