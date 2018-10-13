@@ -10,4 +10,5 @@ Quick Setup
     node bin/www
 
 **Note: You have to modify /routes/users/register.js's permissionlvl value to 255 to create the admin account. After creating the admin account, IMMEDIATELY CHANGE IT BACK TO 1.**
+
 Your site will be available at localhost:3000. To change this, and other settings, edit config.js.
