@@ -1,0 +1,20 @@
+<% include ../partials/header %>
+<style>
+    .center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
+<% if(usersession == undefined || usersession.permissionlvl > 255) { %>
+    <div class="center">
+        <p style="font-size:200px">Oops...</p>
+        <p style="font-size:50px">This is embarrasing. Looks like we've had a error. Please contact the website owner.</p>
+    </div>
+<% } else { %>
+    <h1><%= message %></h1>
+    <h2><%= error.status %></h2>
+    <pre><%= error.stack %></pre>
+<% } %>
+<% include ../partials/footernoinfo %>

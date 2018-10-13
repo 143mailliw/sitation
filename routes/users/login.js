@@ -5,6 +5,7 @@ var crypto = require('crypto');
 var router = express.Router();
 var config = require('../../config');
 var xss = require("xss");
+var Topbar = require('mongoose').model('Topbar');
 
 router.post('/', function(req, res) {
     var username = xss(req.body.username);
@@ -19,8 +20,8 @@ router.post('/', function(req, res) {
             return res.status(500).send();
         }
 
-        if(!user) {
-            return res.status(404).send();
+        if(user == undefined) {
+            return res.redirect("/login/" + "Your username or password is incorrect.")
         }
         req.session.user = user;
         res.redirect('/');
@@ -28,7 +29,19 @@ router.post('/', function(req, res) {
 });
 
 router.get("/", (req, res) => {
-    res.render('login');
+    var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
+    Topbar.find({}, (err, links) => {
+        topbardata = links;
+    });
+    res.render('users/login', { usersession: req.session.user, links: topbardata, isalert: false });
+});
+
+router.get("/:alert", (req, res) => {
+    var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
+    Topbar.find({}, (err, links) => {
+        topbardata = links;
+    });
+    res.render('users/login', { usersession: req.session.user, links: topbardata, isalert: true, alert: req.params.alert });
 });
 
 module.exports = router;

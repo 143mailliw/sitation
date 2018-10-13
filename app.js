@@ -60,12 +60,10 @@ app.use(function(req, res, next) {
 var indexRouter = require('./routes/index');
 app.use('/', indexRouter);
 // users system
-var usersUsersRouter = require('./routes/users/users');
 var usersRegisterRouter = require('./routes/users/register');
 var usersLoginRouter = require('./routes/users/login');
 app.use('/login', usersLoginRouter);
 app.use('/register', usersRegisterRouter);
-app.use('/users', usersUsersRouter);
 // blog
 var blogAddPostRouter = require('./routes/blog/addpost');
 var blogAddCommentRouter = require('./routes/blog/addcomment');
@@ -112,7 +110,11 @@ app.use('/processing/deletetopbar', blogDeleteTopbarRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+    var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
+    Topbar.find({}, (err, links) => {
+        topbardata = links;
+    });
+    res.render('errorpage/404', { usersession: req.session.user, links: topbardata });
 });
 
 // error handler
@@ -128,7 +130,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error' , { usersession: req.session.user, links: topbardata });
+  res.render('errorpage/500' , { usersession: req.session.user, links: topbardata });
 });
 
 module.exports = app;
