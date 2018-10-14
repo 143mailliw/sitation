@@ -22,8 +22,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.disable('etag');
-app.disable('view cache');
 
 // setup mongoose
 mongoose.connect(config.mongodb);
