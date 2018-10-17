@@ -7,7 +7,7 @@ Quick Setup
     git clone https://github.com/ComputeLinux/sitation.git
     cd sitation
     npm install
-    node bin/www
+    node app.js
 
 **Note: You have to modify /routes/users/register.js's permissionlvl value to 255 to create the admin account. After creating the admin account, IMMEDIATELY CHANGE IT BACK TO 1.**
 

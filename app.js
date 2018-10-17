@@ -8,7 +8,7 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var expressSanitizer = require('express-sanitizer');
-var config = require('./config');
+var config = require('./config.js');
 
 // local requirements
 var app = express();
@@ -23,23 +23,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// setup mongoose
-mongoose.connect(config.mongodb);
-
-// database setup
-var postSchema = new mongoose.Schema({ body: String, name: String, author: String, date: String });
-var Post = mongoose.model('Post', postSchema);
-var commentSchema = new mongoose.Schema({ body: String, author: String, date: String, postid: String });
-var Comment = mongoose.model('Comment', commentSchema);
-var pageSchema = new mongoose.Schema({ body: String, name: String, permreq: Number /*TODO: Implement Permission requirements for certain pages.*/ });
-var Page = mongoose.model('Page', pageSchema);
-var topbarSchema = new mongoose.Schema({ name: String, url: String, permreq: Number, /*TODO: Implement Permission requirements for certain pages.*/ });
-var Topbar = mongoose.model('Topbar', topbarSchema);
-
 // parser setup
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(expressSanitizer());
+
+// intial db setup
+mongoose.connect(config.mongodb, { useNewUrlParser: true});
 
 // session setup
 app.use(session({
@@ -54,81 +44,60 @@ app.use(function(req, res, next) {
     next();
 });
 
-// router
-var indexRouter = require('./routes/index');
-app.use('/', indexRouter);
-// users system
-var usersRegisterRouter = require('./routes/users/register');
-var usersLoginRouter = require('./routes/users/login');
-app.use('/login', usersLoginRouter);
-app.use('/register', usersRegisterRouter);
-// blog
-var blogAddPostRouter = require('./routes/blog/addpost');
-var blogAddCommentRouter = require('./routes/blog/addcomment');
-var blogAdminAddBlogPostRouter = require('./routes/admin/blog/addblogpost');
-var blogViewPostRouter = require('./routes/blog/viewpost');
-var blogAdminEditPostRouter = require('./routes/admin/blog/editblogpost');
-var blogDeletePostRouter = require('./routes/blog/deletepost');
-var blogEditPostRouter = require('./routes/blog/editpost');
-var blogAdminListPostRouter = require('./routes/admin/blog/listposts');
-var blogDeleteCommentRouter = require('./routes/blog/deletecomment');
-app.use('/admin/addblogpost', blogAdminAddBlogPostRouter);
-app.use('/admin/editblogpost', blogAdminEditPostRouter);
-app.use('/admin/listposts', blogAdminListPostRouter);
-app.use('/processing/addpost', blogAddPostRouter);
-app.use('/processing/addcomment', blogAddCommentRouter);
-app.use('/processing/deletepost', blogDeletePostRouter);
-app.use('/processing/deletecomment', blogDeleteCommentRouter);
-app.use('/processing/editpost', blogEditPostRouter);
-app.use('/viewpost', blogViewPostRouter);
-// pages
-var blogAddPageRouter = require('./routes/pages/addpage');
-var blogAdminAddPageRouter = require('./routes/admin/pages/addpage');
-var blogViewPageRouter = require('./routes/pages/viewpage');
-var blogAdminEditPageRouter = require('./routes/admin/pages/editpage');
-var blogDeletePageRouter = require('./routes/pages/deletepage');
-var blogEditPageRouter = require('./routes/pages/editpage');
-var blogAdminListPagesRouter = require('./routes/admin/pages/listpages');
-app.use('/admin/addpage', blogAdminAddPageRouter);
-app.use('/admin/editpage', blogAdminEditPageRouter);
-app.use('/admin/listpages', blogAdminListPagesRouter);
-app.use('/processing/addpage', blogAddPageRouter);
-app.use('/processing/deletepage', blogDeletePageRouter);
-app.use('/processing/editpage', blogEditPageRouter);
-app.use('/viewpage', blogViewPageRouter);
-// topbar
-var blogAddTopbarRouter = require('./routes/topbar/addtopbar');
-var blogAdminAddTopbarRouter = require('./routes/admin/topbar/addtopbar');
-var blogDeleteTopbarRouter = require('./routes/topbar/deletetopbar');
-var blogAdminListTopbarsRouter = require('./routes/admin/topbar/listtopbars');
-app.use('/admin/addtopbar', blogAdminAddTopbarRouter);
-app.use('/admin/listtopbars', blogAdminListTopbarsRouter);
-app.use('/processing/addtopbar', blogAddTopbarRouter);
-app.use('/processing/deletetopbar', blogDeleteTopbarRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
-    Topbar.find({}, (err, links) => {
-        topbardata = links;
+//plugin setup
+var currentRequire = "what_broke_this_time";
+const fs = require('fs');
+const directoryPath = './plugins';
+fs.readdir(directoryPath, function (err, files) {
+    //handling error
+    if (err) {
+        return console.log('Unable to scan directory: ' + err);
+    }
+    files.forEach(function (file) {
+        console.log('Found Plugin: ' + file);
+        currentRequire = require('./plugins/' + file);
+        currentRequire.databaseSetup();
     });
-    res.render('errorpage/404', { usersession: req.session.user, links: topbardata });
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-    var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
-    Topbar.find({}, (err, links) => {
-        topbardata = links;
+    files.forEach(function (file) {
+        currentRequire = require('./plugins/' + file);
+        currentRequire.information.routes.forEach(function(value) {
+            app.use(value.route, require('./routes/' + value.router));
+        });
+    });
+    files.forEach(function (file) {
+        currentRequire = require('./plugins/' + file);
+        currentRequire.setup();
     });
 
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    var Topbar = require('mongoose').model('Topbar');
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('errorpage/500' , { usersession: req.session.user, links: topbardata });
+    // catch 404 and forward to error handler
+    app.use(function(req, res, next) {
+        var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
+        Topbar.find({}, (err, links) => {
+            topbardata = links;
+        });
+        res.render('errorpage/404', { usersession: req.session.user, links: topbardata });
+    });
+
+    // error handler
+    app.use(function(err, req, res, next) {
+        var topbardata = new Topbar({name:"Whoops! We did a fucksy wucksy. The navbar system is broken!", url: "/"});
+        Topbar.find({}, (err, links) => {
+            topbardata = links;
+        });
+
+        // set locals, only providing error in development
+        res.locals.message = err.message;
+        res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+        // render the error page
+        res.status(err.status || 500);
+        res.render('errorpage/500' , { usersession: req.session.user, links: topbardata });
+    });
+    var port = process.env.PORT || config.port;
+    app.listen(port, function() {
+        console.log("Listening on " + port);
+    });
 });
-
-module.exports = app;
+console.log('exporting');

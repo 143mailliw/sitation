@@ -1,5 +1,5 @@
 var express = require('express');
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 var router = express.Router();
 var xss = require("xss");
 var Topbar = require('mongoose').model('Topbar');
