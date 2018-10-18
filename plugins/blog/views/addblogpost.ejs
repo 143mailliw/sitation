@@ -1,0 +1,15 @@
+<% include ../../../views/partials/header %>
+
+<div class="border border-secondary rounded givemespace">
+    <h3>Add Post</h3>
+    <form action="/processing/addPost" method="POST">
+        <div class="form-group">
+            <input type="text" class="form-control" name="name" placeholder="Name">
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" name="body" placeholder="Body" rows="6"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<% include ../../../views/partials/footer %>

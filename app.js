@@ -55,17 +55,17 @@ fs.readdir(directoryPath, function (err, files) {
     }
     files.forEach(function (file) {
         console.log('Found Plugin: ' + file);
-        currentRequire = require('./plugins/' + file);
+        currentRequire = require('./plugins/' + file + "/main.js");
         currentRequire.databaseSetup();
     });
     files.forEach(function (file) {
-        currentRequire = require('./plugins/' + file);
+        currentRequire = require('./plugins/' + file + "/main.js");
         currentRequire.information.routes.forEach(function(value) {
-            app.use(value.route, require('./routes/' + value.router));
+            app.use(value.route, require("./plugins/" + file + "/routes/" + value.router));
         });
     });
     files.forEach(function (file) {
-        currentRequire = require('./plugins/' + file);
+        currentRequire = require('./plugins/' + file + "/main.js");
         currentRequire.setup();
     });
 

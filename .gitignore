@@ -29,3 +29,5 @@ node_modules
 
 #IDEA
 .idea
+
+config.js
