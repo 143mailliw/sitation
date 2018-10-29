@@ -4,9 +4,9 @@ Sitation is a simple CMS made with Node.JS and Express.
 
 Requirements
 ------------
-*Node.JS 8.12 or higher
-*MongoDB 4 or higher
-*The installation folder must be writable. (you can change this after installation, but config.js will always need to be writable)
+* Node.JS 8.12 or higher
+* MongoDB 4 or higher
+* The installation folder must be writable. (you can change this after installation, but config.js will always need to be writable)
 
 Quick Setup
 -----------
