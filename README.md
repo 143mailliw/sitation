@@ -12,7 +12,7 @@ Quick Setup
 -----------
     git clone https://github.com/ComputeLinux/sitation.git
     cd sitation
-    npm install.
+    npm install
     node app.js
 
 Your site will initially be available at localhost:3000. You can change this during the setup process. To change this, as well as  other settings after installation, edit config.js.
