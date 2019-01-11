@@ -15,7 +15,7 @@ router.get('/:id', function(req, res) {
     }
     if(req.session.user.permissionlvl === 255) {
         Page.findById({_id: req.params.id}, (err, page) => {
-            res.render(require.resolve('../views/editpage'), {page: page, usersession: req.session.user, links: topbardata });
+            res.render(require.resolve('../../views/editpage'), {page: page, usersession: req.session.user, links: topbardata });
         });
     } else {
         return res.status(403).send();

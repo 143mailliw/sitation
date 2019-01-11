@@ -16,7 +16,7 @@ router.get("/", (req, res) => {
             return res.status(403).send();
         }
         Page.find({}, (err, pages) => {
-            res.render(require.resolve('../vies/listpages'), { pages: pages, usersession: req.session.user, links: topbardata })
+            res.render(require.resolve('../../views/listpages'), { pages: pages, usersession: req.session.user, links: topbardata })
         });
     } else {
         res.status(403).send();
