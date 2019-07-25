@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
             return res.status(403).send();
         }
         Topbar.find({}, (err, topbar) => {
-            res.render('../../views/topbar/listtopbars', { links: topbar, usersession: req.session.user })
+            res.render(require.resolve('../../views/topbar/listtopbars.ejs'), { links: topbar, usersession: req.session.user })
         });
     } else {
         res.status(403).send();
